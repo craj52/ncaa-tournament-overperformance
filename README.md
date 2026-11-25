@@ -50,6 +50,8 @@ To reproduce the analysis with a copy of the dataset you are authorized to use:
 
 The code uses base R functions including `glm()`, `lm()`, `aggregate()`, and `lowess()`.
 
+**Validation:** I successfully ran the logistic regression analysis in RStudio using the original dataset. The analysis generated the expected results, including the final model's AIC of 1931.774, matching the original conference research.
+
 ## Limitations
 
 - "Outperforming" means winning more games than the historical average for a team's seed. Other definitions could produce different results.
