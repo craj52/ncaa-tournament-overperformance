@@ -1,0 +1,10 @@
+# KenPom data is not redistributed with this repository
+data/*.csv
+
+# RStudio files and rendered temporary output
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.html
+*.log
