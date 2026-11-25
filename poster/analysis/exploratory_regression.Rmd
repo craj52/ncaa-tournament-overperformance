@@ -1,0 +1,73 @@
+---
+title: "NCAA Tournament Wins — Exploratory Linear Regression"
+author: "Cole Rajaratnam"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r}
+data <- read_project_data <- function() {
+  candidates <- c("data/kenpom_tournament_data.csv", "../data/kenpom_tournament_data.csv")
+  paths <- candidates[file.exists(candidates)]
+  if (length(paths) == 0) {
+    stop("Missing KenPom data: see data/README.md for instructions.")
+  }
+  read.csv(paths[1], check.names = TRUE)
+}
+data <- read_project_data()
+```
+
+```{r}
+model1 <- lm(Wins.0.6. ~ Seed + AdjOE + AdjDE, data = data)
+summary(model1)
+```
+
+```{r}
+model2 <- lm(Wins.0.6. ~ Seed + AdjOE + AdjDE + Coach + AP.Top.25 + Top.12 + X4. + Top21_O + Top37_D, data = data)
+
+summary(model2)
+```
+
+```{r}
+data$ProfileScore <- data$Coach + data$AP.Top.25 + data$Top.12 + data$X4. + data$Top21_O + data$Top37_D
+```
+
+```{r}
+lm(Wins.0.6. ~ ProfileScore + Seed, data=data)
+```
+
+```{r}
+champions <- subset(data, Wins.0.6. == 6)
+mean(champions$ProfileScore)
+```
+```{r}
+mean(data$ProfileScore)
+```
+```{r}
+aggregate(Wins.0.6. ~ ProfileScore, data = data, mean)
+```
+
+```{r}
+seed_expectation <- aggregate(Wins.0.6. ~ Seed, data = data, mean)
+seed_expectation
+```
+
+```{r}
+data <- merge(data, seed_expectation, by = "Seed")
+```
+
+```{r}
+data$Overperformance <- data$Wins.0.6..x - data$Wins.0.6..y
+```
+
+```{r}
+model3 <- lm(Overperformance ~ Coach + AP.Top.25 + Top.12 + X4. + Top21_O + Top37_D, data = data)
+summary(model3)
+```
+```{r}
+max(data$ProfileScore)
+```
+```{r}
+min(champions$ProfileScore)
+```
+
